@@ -1,0 +1,18 @@
+{
+  "welcomeTo": "Welcome to",
+  "appName": "D E S T I N Y",
+  "search": "Search",
+  "accountSettings": "Account Settings",
+  "orderHistory": "Order History",
+  "logout": "LogOut",
+  "privacySettings": "Privacy Settings",
+  "lightTheme": "Light Theme",
+  "darkTheme": "Dark Theme",
+  "updatePassword": "Update Password",
+  "updateProfile": "Update Profile",
+  "addToCart": "Add To Cart",
+  "total": "Total",
+  "email": "Email",
+  "password": "Password",
+  "language": "Language"
+}
