@@ -52,15 +52,13 @@ class Destiny extends StatelessWidget {
             builder: (context, state) {
               return BlocBuilder<ThemeBloc, ThemeState>(
                   builder: (context, themeState) {
-                String? languageLocale =
-                    LocalStorageService.read(LocalStorageKeys.language);
+               final String languageLocale = LocalStorageService.read(LocalStorageKeys.language) ?? 'en';
                 final themeMode =
                     AppConstants().appTheme ? ThemeMode.light : ThemeMode.dark;
                 return MaterialApp.router(
-                  locale: Locale(languageLocale!),
-
+                  locale: Locale(languageLocale),
                   supportedLocales: AppConstants.supportedLanguages,
-                  localizationsDelegates: [
+                  localizationsDelegates: const [
                     AppLocalization.delegate,
                     GlobalMaterialLocalizations.delegate,
                     GlobalWidgetsLocalizations.delegate,
