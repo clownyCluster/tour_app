@@ -1,20 +1,18 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/widgets.dart';
 import 'package:tour_destiny/Bloc/Home_Bloc/home_bloc.dart';
 import 'package:tour_destiny/Models/Repository/tours_list.dart';
 import 'package:tour_destiny/Models/services/local_storage_service/local_storage_service.dart';
-import 'package:tour_destiny/Models/services/network_response/app_exception.dart';
 import 'package:tour_destiny/Models/services/network_response/status.dart';
 import 'package:tour_destiny/View/widget/home_app_bar.dart';
 import 'package:tour_destiny/routes/routes_imports.gr.dart';
 import 'package:tour_destiny/utils/constant/constant.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:tour_destiny/utils/constant/data_status.dart';
 import 'package:tour_destiny/utils/constant/theme_container.dart';
 
+import '../../../utils/constant/no_internet.dart';
 import '../../widget/place_bottom.dart';
 import '../../widget/tours_tiles.dart';
 
@@ -36,9 +34,9 @@ class HomeScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: BlocBuilder<HomeBloc, HomeState>(
             builder: (context, state) {
-              switch (state.topFiveResponse.Datastatus) {
-                case DataStatus.Loading:
-                  return Column(
+              return CustomDataStatusWidget(
+                  status: state.topFiveResponse.Datastatus!,
+                  loadingStatus: Column(
                     children: [
                       SizedBox(
                         height: 150,
@@ -128,13 +126,8 @@ class HomeScreen extends StatelessWidget {
                         }).toList(),
                       ),
                     ],
-                  );
-
-                case DataStatus.Error:
-                  return Text(state.topFiveResponse.message.toString());
-
-                case DataStatus.Completed:
-                  return Column(
+                  ),
+                  successStatus: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildTopFiveSection(context, state),
@@ -143,13 +136,10 @@ class HomeScreen extends StatelessWidget {
                       sSizedBox(),
                       _buildTourDetailsList(context, state),
                     ],
-                  );
-
-                default:
-                  null;
-
-                  return Container();
-              }
+                  ),
+                  checkResponse:state.topFiveResponse.data ,
+                  errorStatus: 
+                  Text(state.topFiveResponse.message.toString()));
             },
           ),
         ),
@@ -185,6 +175,7 @@ Widget _buildTopFiveSection(BuildContext context, HomeState state) {
       );
 
     case DataStatus.Error:
+     
       return Text(state.topFiveResponse.message.toString());
 
     case DataStatus.Completed:
@@ -199,6 +190,15 @@ Widget _buildTopFiveSection(BuildContext context, HomeState state) {
             return Padding(
               padding: const EdgeInsets.only(right: 15),
               child: ToursTiles(
+                // onTap: (){
+                //    AutoRouter.of(context).push(DetailsScreenRoute(
+                // des: tourData!.id,
+                // image: tourData.imageCover,
+                // name: tourData.name,
+
+                // ratings: tourData.ratingsAverage.toString(),
+                // price: tourData.price.toString()));
+                // },
                 bottomLeft: Text(
                   tourData?.name ?? 'n/a',
                   maxLines: 2,

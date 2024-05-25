@@ -1,5 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:tour_destiny/Bloc/Login_cubit/login_cubit.dart';
+import 'package:tour_destiny/View/Auth/Splash_Module/splash_Screen.dart';
+import 'package:tour_destiny/routes/routes_imports.gr.dart';
 import 'package:tour_destiny/utils/constant/k_text_form_field.dart';
 import 'package:tour_destiny/utils/constant/painter.dart';
 import 'package:tour_destiny/utils/utils.dart';
@@ -70,7 +72,13 @@ class _LoginScreenState extends State<LoginScreen> {
             SingleChildScrollView(
               child: Form(
                 // key: formKey,
-                child: BlocBuilder<LoginCubit, LoginState>(
+                child: BlocConsumer<LoginCubit, LoginState>(
+                  listener: (context, state) {
+                    if (state.isLoading == true) {
+                      AutoRouter.of(context)
+                          .popAndPushAll([const SplashScreenRoute()]);
+                    }
+                  },
                   builder: (context, state) {
                     return Container(
                       padding: const EdgeInsets.all(20),

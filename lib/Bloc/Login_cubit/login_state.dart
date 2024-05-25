@@ -10,13 +10,11 @@ class LoginState extends Equatable {
       {this.isLoading = false,
       this.message = '',
       this.email = '',
-      this.password = ''});
+      this.password = '',
+      });
 
   LoginState copyWith(
-      {bool? isLoading,
-      String? message,
-      String? email,
-      String? password}) {
+      {bool? isLoading, String? message, String? email, String? password}) {
     return LoginState(
         isLoading: isLoading ?? this.isLoading,
         message: message ?? this.message,

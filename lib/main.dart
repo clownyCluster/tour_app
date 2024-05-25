@@ -15,16 +15,24 @@ import 'package:tour_destiny/utils/localization/app_localization.dart';
 import 'Models/services/Theme/dark_theme.dart';
 import 'package:oktoast/oktoast.dart';
 import 'Models/services/local_storage_service/local_storage_service.dart';
+import 'data/cart/cart_details.dart';
 import 'routes/routes_imports.dart';
 import 'package:tour_destiny/injection.dart' as di;
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:hive_flutter/adapters.dart';
 
 import 'utils/constant/constant.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  var folder = await getApplicationDocumentsDirectory();
   await LocalStorageService.init();
   await di.init();
+  await Hive.initFlutter();
+  Hive.init(folder.path);
+  Hive.registerAdapter(CartDetailsAdapter());
+  await Hive.openBox<CartDetails>('cart');
 
   runApp(Destiny());
 }
@@ -34,13 +42,6 @@ class Destiny extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // List<Locale> _locals = [
-    //   Locale('en', 'US'),
-    //   Locale('ne', 'NP'),
-    // ];
-    // AppConstants.languages.forEach((language) {
-    //   _locals.add(Locale(language.languageCode!, language.countryCode));
-    // });
     final _appRouter = AppRouter();
 
     return MultiBlocProvider(
@@ -52,7 +53,8 @@ class Destiny extends StatelessWidget {
             builder: (context, state) {
               return BlocBuilder<ThemeBloc, ThemeState>(
                   builder: (context, themeState) {
-               final String languageLocale = LocalStorageService.read(LocalStorageKeys.language) ?? 'en';
+                final String languageLocale =
+                    LocalStorageService.read(LocalStorageKeys.language) ?? 'en';
                 final themeMode =
                     AppConstants().appTheme ? ThemeMode.light : ThemeMode.dark;
                 return MaterialApp.router(

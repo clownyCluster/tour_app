@@ -85,6 +85,7 @@ class DetailsScreen extends StatelessWidget {
         ),
         
         bottomNavigationBar: DetailsBottomBar(
+          image: image!,
           des: des!,
           name: name!,
           price: price!,

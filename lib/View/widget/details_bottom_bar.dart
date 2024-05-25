@@ -1,20 +1,28 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tour_destiny/Models/services/toast_service.dart';
 import 'package:tour_destiny/utils/constant/theme_container.dart';
 import 'package:tour_destiny/View/widget/tours_tiles.dart';
 import 'package:tour_destiny/utils/constant/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import '../../data/cart/cart_box.dart';
+import '../../data/cart/cart_details.dart';
+
 class DetailsBottomBar extends StatelessWidget {
   String? name;
   String? des;
   String? price;
   String? ratings;
+  String? image;
   List? imageList;
   DetailsBottomBar({
     super.key,
     this.des,
     this.name,
     this.imageList,
+    this.image,
     this.price,
     this.ratings,
   });
@@ -113,24 +121,60 @@ class DetailsBottomBar extends StatelessWidget {
                   ),
                 ],
               ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                decoration: BoxDecoration(
-                  color: primaryColor,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.shopping_cart,
-                      color: whiteColor,
-                    ),
-                    maxWidthSpan(),
-                    Text(
-                      'Add to cart',
-                      style: kkWhiteBoldTextStyle(),
-                    )
-                  ],
+              GestureDetector(
+                onTap: () async {
+                  final data = CartDetails(
+                    quantity: 1,
+                    name: name ?? 'N/A',
+                    price: price.toString(),
+                    slug: des ?? 'N/A',
+                    image: image ?? '',
+                  );
+              
+                  final box = CartBoxes.getData();
+              
+                  bool isItemAlreadyAdded = false;
+                  for (var element in box.values) {
+                    if (element.name == data.name) {
+                      isItemAlreadyAdded = true;
+                      break;
+                    }
+                  }
+              
+                  if (isItemAlreadyAdded) {
+                    ToastService()
+                        .e('This item is already added in the list');
+                  } else {
+                    await box.add(data);
+                    data.save();
+                    ToastService().s('Added successfully to cart');
+                    print(data.name);
+                    print(data.price);
+                    print(data.slug);
+                    print(data.quantity);
+                  }
+                  
+                },
+                child: Container(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                  decoration: BoxDecoration(
+                    color: primaryColor,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.shopping_cart,
+                        color: whiteColor,
+                      ),
+                      maxWidthSpan(),
+                      Text(
+                        'Add to cart',
+                        style: kkWhiteBoldTextStyle(),
+                      )
+                    ],
+                  ),
                 ),
               )
             ],

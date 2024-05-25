@@ -38,10 +38,10 @@ class HomeDisplayScreen extends StatelessWidget {
                   Icons.home,
                   color: whiteColor,
                 ),
-                Icon(
-                  Icons.bookmark_border_rounded,
-                  color: whiteColor,
-                ),
+                  Icon(
+                    Icons.bookmark_border_rounded,
+                    color: whiteColor,
+                  ),
                 Icon(
                   Icons.person,
                   color: whiteColor,

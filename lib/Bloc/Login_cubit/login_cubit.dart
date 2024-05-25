@@ -15,13 +15,11 @@ part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   final AuthRepository authRepository;
-  final BuildContext? context;
-
-  LoginCubit({required this.authRepository, this.context})
+  LoginCubit({required this.authRepository, })
       : super(LoginState());
 
   Future<void> loginUser(
-      String email, String password, final BuildContext context) async {
+      String email, String password,BuildContext context ) async {
     emit(state.copyWith(isLoading: true));
     await authRepository.loginUser(email, password).then((value) async {
       print(value['token']);
